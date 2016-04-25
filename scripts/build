@@ -1,0 +1,25 @@
+#!/bin/bash
+
+outdir="publish"
+tmp="$outdir/.tmp"
+input=$tmp
+output="$outdir/report.pdf"
+
+# ensure outdir exists
+mkdir -p $outdir
+
+# ls the chapters
+# convert newlines to commas
+# remove trailing comma
+chapters=$(ls chapters | tr '\n' ',' | sed s'/,$//')
+
+eval "cat chapters/{$chapters}" > $tmp
+
+pandoc $input -o $output \
+  --toc \
+  --chapters \
+  --number-sections \
+  --listings \
+  --bibliography=references.bib \
+  --highlight-style=monochrome
+
